@@ -1,3 +1,4 @@
+import 'package:expenses_tracker/screen/dashboard_screen.dart';
 import 'package:expenses_tracker/widgets/background_wave.dart';
 import 'package:flutter/material.dart';
 
@@ -20,27 +21,22 @@ class WelcomeScreen extends StatelessWidget {
           ),
           child: Stack(
             children: [
-
               //First wave
-Positioned(
-  left: 0,
-  right: 0,
-  bottom: 0,
-  height: 260,
-  child: BackgroundWave(
-    color: Color(0xFFD5E8C8),
-  ),
-),
+              Positioned(
+                left: 0,
+                right: 0,
+                bottom: 0,
+                height: 260,
+                child: BackgroundWave(color: Color(0xFFD5E8C8)),
+              ),
               //Second Wave.
-Positioned(
-  left: 0,
-  right: 0,
-  bottom: 0,
-  height: 190,
-  child: BackgroundWave(
-    color: Color(0xFFB5D9B0),
-  ),
-),
+              Positioned(
+                left: 0,
+                right: 0,
+                bottom: 0,
+                height: 190,
+                child: BackgroundWave(color: Color(0xFFB5D9B0)),
+              ),
               Center(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -81,7 +77,9 @@ Positioned(
                       width: 280,
                       height: 50,
                       child: ElevatedButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          Navigator.push(context, MaterialPageRoute(builder: (context) => const DashboardScreen()));
+                        },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Color(0xFF064E3B),
                           foregroundColor: Colors.white,
