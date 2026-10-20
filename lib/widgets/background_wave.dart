@@ -19,28 +19,31 @@ class WaveClipper extends CustomClipper<Path> {
   Path getClip(Size size) {
     final path = Path();
 
-    path.lineTo(0, size.height * 0.65);
+    path.moveTo(0, size.height * 0.30);
 
     path.quadraticBezierTo(
       size.width * 0.25,
-      size.height * 0.45,
-      size.width * 0.50,
-      size.height * 0.65,
+      size.height * 0.30,
+      size.width * 0.48,
+      size.height * 0.70,
     );
+
     path.quadraticBezierTo(
-      size.width * 0.75,
-      size.height * 0.85,
+      size.width * 0.70,
+      size.height * 0.95,
       size.width,
-      size.height * 0.60,
+      size.height * 0.45,
     );
-    path.lineTo(size.width, 0);
+
+    path.lineTo(size.width, size.height);
+    path.lineTo(0, size.height);
     path.close();
+
     return path;
   }
 
   @override
-  shouldReclip(covariant CustomClipper<Path> oldClipper){
+  shouldReclip(covariant CustomClipper<Path> oldClipper) {
     return false;
-
   }
 }

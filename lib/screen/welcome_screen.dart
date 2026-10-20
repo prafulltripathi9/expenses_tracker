@@ -15,17 +15,32 @@ class WelcomeScreen extends StatelessWidget {
             gradient: LinearGradient(
               begin: Alignment.topCenter,
               end: Alignment.bottomCenter,
-              colors: [Color(0xFFF5F2E8), Color(0xFFE5F0D8), Color(0xFFAED9B7)],
+              colors: [Color(0xFFF5F2E8), Color(0xFFEAF1DD), Color(0xFFC5E2C3)],
             ),
           ),
           child: Stack(
             children: [
+
               //First wave
-              Positioned.fill(
-                child:  BackgroundWave(color: Color(0xFFD5E8C8)),
-              ),
+Positioned(
+  left: 0,
+  right: 0,
+  bottom: 0,
+  height: 260,
+  child: BackgroundWave(
+    color: Color(0xFFD5E8C8),
+  ),
+),
               //Second Wave.
-              Positioned.fill(child: BackgroundWave(color: Color(0xFFB5D9B0)),),
+Positioned(
+  left: 0,
+  right: 0,
+  bottom: 0,
+  height: 190,
+  child: BackgroundWave(
+    color: Color(0xFFB5D9B0),
+  ),
+),
               Center(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
