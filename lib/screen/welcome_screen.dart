@@ -1,3 +1,4 @@
+import 'package:expenses_tracker/screen/dashboard_screen.dart';
 import 'package:expenses_tracker/widgets/background_wave.dart';
 import 'package:flutter/material.dart';
 
@@ -66,7 +67,9 @@ class WelcomeScreen extends StatelessWidget {
                       width: 280,
                       height: 50,
                       child: ElevatedButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          Navigator.push(context, MaterialPageRoute(builder: (context) => DashboardScreen()));
+                        },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Color(0xFF064E3B),
                           foregroundColor: Colors.white,
