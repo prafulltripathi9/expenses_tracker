@@ -49,7 +49,11 @@ class ExpenseSummaryCard extends StatelessWidget {
           //Card title
           Text(
             title,
-            style: const TextStyle(fontSize: 12, color: Color(0xFF374151), fontWeight: FontWeight.bold),
+            style: const TextStyle(
+              fontSize: 12,
+              color: Color(0xFF374151),
+              fontWeight: FontWeight.bold,
+            ),
           ),
           SizedBox(height: 4),
           Text(

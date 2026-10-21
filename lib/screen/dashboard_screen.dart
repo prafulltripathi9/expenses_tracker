@@ -1,3 +1,4 @@
+import 'package:expenses_tracker/screen/add_expenses_screen.dart';
 import 'package:expenses_tracker/widgets/expense_summary_card.dart';
 import 'package:expenses_tracker/widgets/today_expense_card.dart';
 import 'package:expenses_tracker/widgets/transaction_card.dart';
@@ -137,7 +138,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 Row(
                   children: [
                     Expanded(
-                      
                       child: TransactionCard(
                         icon: Icons.shopping_bag_rounded,
                         color: Color(0xFF047857),
@@ -156,7 +156,12 @@ class _DashboardScreenState extends State<DashboardScreen> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {},
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => AddExpensesScreen()),
+          );
+        },
         backgroundColor: Color(0xFF064E3B),
         foregroundColor: Colors.white,
         shape: CircleBorder(),
