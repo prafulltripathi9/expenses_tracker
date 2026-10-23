@@ -38,12 +38,56 @@ class _AddExpensesScreenState extends State<AddExpensesScreen> {
     "Education",
     "Other",
   ];
+
+  //Category icon and color
+  IconData getCategoryIcon(String category) {
+    switch (category) {
+      case "Food":
+        return Icons.restaurant;
+      case "Travel":
+        return Icons.directions_car;
+      case "Shopping":
+        return Icons.shopping_bag;
+      case "Bills":
+        return Icons.receipt_long;
+      case "Entertainment":
+        return Icons.movie;
+      case "Health":
+        return Icons.favorite;
+      case "Education":
+        return Icons.school;
+      default:
+        return Icons.category;
+    }
+  }
+
+  Color getCategoryColor(String category) {
+    switch (category) {
+      case "Food":
+        return const Color(0xFFFF9800);
+      case "Travel":
+        return const Color(0xFF448AFF);
+      case "Shopping":
+        return const Color(0xFFFF5252);
+      case "Bills":
+        return const Color(0xFF9575CD);
+      case "Entertainment":
+        return const Color(0xFFAB47BC);
+      case "Health":
+        return const Color(0xFFEF5350);
+      case "Education":
+        return const Color(0xFF00897B);
+      default:
+        return const Color(0xFF78909C);
+    }
+  }
+
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Add Expenses"),
+        title: Text("Add Expenses", style: TextStyle(fontWeight: FontWeight.bold),),
         backgroundColor: Color(0xFFF5F2E8),
-        foregroundColor: Color(0xFF064E3B),
+        // foregroundColor: Color(0xFF064E3B),
         elevation: 0,
       ),
       body: SingleChildScrollView(
@@ -104,9 +148,23 @@ class _AddExpensesScreenState extends State<AddExpensesScreen> {
               ),
             ),
             SizedBox(height: 10),
-            DropdownButtonFormField(
+            DropdownButtonFormField<String>(
               initialValue: selectedCategory,
               decoration: InputDecoration(
+                prefixIcon: Padding(
+                  padding: EdgeInsets.all(12),
+                  child: CircleAvatar(
+                    radius: 14,
+                    backgroundColor: getCategoryColor(
+                      selectedCategory,
+                    ).withValues(alpha: 0.15),
+                    child: Icon(
+                      getCategoryIcon(selectedCategory),
+                      color: getCategoryColor(selectedCategory),
+                      size: 18,
+                    ),
+                  ),
+                ),
                 filled: true,
                 fillColor: Colors.white,
                 border: OutlineInputBorder(
@@ -125,7 +183,76 @@ class _AddExpensesScreenState extends State<AddExpensesScreen> {
                 }
               },
             ),
-            SizedBox(height: 10),
+            const SizedBox(height: 12),
+
+            Wrap(
+              spacing: 8,
+              runSpacing: 8,
+              children: categories.map((category) {
+                final Color categoryColor = getCategoryColor(category);
+                final bool isSelected = selectedCategory == category;
+
+                return SizedBox(
+                  width: (MediaQuery.of(context).size.width - 72) / 4,
+                  height: 76,
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: isSelected
+                          ? categoryColor.withValues(alpha: 0.25)
+                          : Colors.white,
+                      // : categoryColor.withValues(alpha: 0.08),
+                      borderRadius: BorderRadius.circular(12),
+                      border: Border.all(
+                        color: isSelected ? categoryColor : Color(0xFFE5E7EB),
+                        // : categoryColor.withValues(alpha: 0.15),
+                        width: isSelected ? 2 : 1,
+                      ),
+                      boxShadow: isSelected
+                          ? [
+                              BoxShadow(
+                                color: categoryColor.withValues(alpha: 0.15),
+                                blurRadius: 5,
+                                offset: const Offset(0, 2),
+                              ),
+                            ]
+                          : [],
+                    ),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        CircleAvatar(
+                          radius: 15,
+                          backgroundColor: categoryColor.withValues(
+                            alpha: 0.15,
+                          ),
+                          child: Icon(
+                            getCategoryIcon(category),
+                            color: categoryColor,
+                            size: 18,
+                          ),
+                        ),
+                        const SizedBox(height: 5),
+                        Text(
+                          category,
+                          textAlign: TextAlign.center,
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(
+                            fontSize: 10,
+                            fontWeight: isSelected
+                                ? FontWeight.bold
+                                : FontWeight.w500,
+                            color: const Color(0xFF374151),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                );
+              }).toList(),
+            ),
+
+            const SizedBox(height: 10),
             Text(
               "Date*",
               style: TextStyle(
@@ -181,9 +308,14 @@ class _AddExpensesScreenState extends State<AddExpensesScreen> {
             TextField(
               controller: noteController,
               maxLines: 3,
+              keyboardType: TextInputType.multiline,
               decoration: InputDecoration(
                 hintText: "Filled Petrol at pump",
                 alignLabelWithHint: true,
+                contentPadding: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 16,
+                ),
                 filled: true,
                 fillColor: Colors.white,
                 border: OutlineInputBorder(
@@ -197,11 +329,12 @@ class _AddExpensesScreenState extends State<AddExpensesScreen> {
       ),
     );
   }
+
   @override
-  void dispose(){
-titleController.dispose();
-amountController.dispose();
-noteController.dispose();
-super.dispose();
+  void dispose() {
+    titleController.dispose();
+    amountController.dispose();
+    noteController.dispose();
+    super.dispose();
   }
 }
