@@ -6,6 +6,7 @@ import 'package:expenses_tracker/widgets/expense_summary_card.dart';
 import 'package:expenses_tracker/widgets/today_expense_card.dart';
 import 'package:expenses_tracker/widgets/transaction_card.dart';
 import 'package:flutter/material.dart';
+import 'package:expenses_tracker/database/app_database.dart';
 
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({super.key});
@@ -16,6 +17,148 @@ class DashboardScreen extends StatefulWidget {
 
 class _DashboardScreenState extends State<DashboardScreen> {
   int _selectedIndex = 0;
+  List<ExpenseData> allExpenses = [];
+
+  @override
+  void initState() {
+    super.initState();
+    loadExpenses();
+  }
+
+  Future<void> loadExpenses() async {
+    final expenses = await appDatabase.getAllExpenses();
+
+    if (!mounted) return;
+
+    setState(() {
+      allExpenses = expenses;
+    });
+  }
+
+  double get totalExpenses {
+    return allExpenses.fold(0.0, (sum, expense) => sum + expense.amount);
+  }
+
+  DateTime get currentDate => DateTime.now();
+
+  double get thisMonthExpenses {
+    return allExpenses
+        .where(
+          (expense) =>
+              expense.date.year == currentDate.year &&
+              expense.date.month == currentDate.month,
+        )
+        .fold(0.0, (sum, expense) => sum + expense.amount);
+  }
+
+  List<ExpenseData> get todayExpenses {
+    return allExpenses.where((expense) {
+      return expense.date.year == currentDate.year &&
+          expense.date.month == currentDate.month &&
+          expense.date.day == currentDate.day;
+    }).toList();
+  }
+
+  double get todayTotal {
+    return todayExpenses.fold(0.0, (sum, expense) => sum + expense.amount);
+  }
+
+  List<ExpenseData> get recentExpenses {
+    final expenses = List<ExpenseData>.from(allExpenses);
+
+    expenses.sort((a, b) {
+      final dateComparison = b.date.compareTo(a.date);
+
+      if (dateComparison != 0) {
+        return dateComparison;
+      }
+
+      return b.id.compareTo(a.id);
+    });
+
+    return expenses.take(4).toList();
+  }
+
+  String _getCurrentMonth() {
+    const months = [
+      'January',
+      'February',
+      'March',
+      'April',
+      'May',
+      'June',
+      'July',
+      'August',
+      'September',
+      'October',
+      'November',
+      'December',
+    ];
+
+    return months[DateTime.now().month - 1];
+  }
+
+  IconData getCategoryIcon(String category) {
+    switch (category.toLowerCase()) {
+      case 'food':
+        return Icons.restaurant;
+      case 'travel':
+        return Icons.directions_car;
+      case 'shopping':
+        return Icons.shopping_bag_rounded;
+      case 'bills':
+        return Icons.lightbulb_outline;
+      case 'entertainment':
+        return Icons.movie;
+      case 'health':
+        return Icons.medical_services;
+      case 'education':
+        return Icons.school;
+      default:
+        return Icons.receipt_long;
+    }
+  }
+
+  Color getCategoryColor(String category) {
+    switch (category.toLowerCase()) {
+      case 'food':
+        return Colors.orange;
+      case 'travel':
+        return Colors.deepPurple;
+      case 'shopping':
+        return Colors.redAccent;
+      case 'bills':
+        return Colors.teal;
+      case 'entertainment':
+        return Colors.pink;
+      case 'health':
+        return Colors.red;
+      case 'education':
+        return Colors.indigo;
+      default:
+        return const Color(0xFF047857);
+    }
+  }
+
+  String _getMonthName(int month) {
+    const months = [
+      'Jan',
+      'Feb',
+      'Mar',
+      'Apr',
+      'May',
+      'Jun',
+      'Jul',
+      'Aug',
+      'Sep',
+      'Oct',
+      'Nov',
+      'Dec',
+    ];
+
+    return months[month - 1];
+  }
+
   @override
   Widget build(BuildContext context) {
     //Start Scfolld
@@ -112,7 +255,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                           child: ExpenseSummaryCard(
                             icon: Icons.account_balance_wallet_outlined,
                             title: "Tottal Expenses",
-                            amount: "₹ 8,450",
+                            amount: "₹ ${totalExpenses.toStringAsFixed(2)}",
                             subtitle: "All Time",
                             color: Color(0xFF047857),
                             iconBackgroundColor: Color(0xFFD1FAE5),
@@ -123,8 +266,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
                           child: ExpenseSummaryCard(
                             icon: Icons.calendar_month_outlined,
                             title: "This Month",
-                            amount: "₹ 3,200",
-                            subtitle: "December",
+                            amount: "₹ ${thisMonthExpenses.toStringAsFixed(2)}",
+                            subtitle: _getCurrentMonth(),
                             color: Color(0xFFDC2626),
                             iconBackgroundColor: Color(0xFFFEE2E2),
                           ),
@@ -136,27 +279,80 @@ class _DashboardScreenState extends State<DashboardScreen> {
                       children: [
                         Expanded(
                           child: TodayExpenseCard(
-                            amount: "₹ 450",
-                            transaction: "3 transactions",
+                            amount: "₹ ${todayTotal.toStringAsFixed(2)}",
+                            transaction: "${todayExpenses.length} transactions",
                           ),
                         ),
                       ],
                     ),
-                    SizedBox(height: 20),
+                    // Recent Transactions heading
+                    const SizedBox(height: 24),
+
                     Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Expanded(
-                          child: TransactionCard(
-                            icon: Icons.shopping_bag_rounded,
-                            color: Color(0xFF047857),
-                            iconBackgroundColor: Color(0xFFD1FAE5),
-                            title: "Groceries",
-                            category: "Shopping",
-                            date: "Today",
-                            amount: "₹ 600",
+                        const Text(
+                          "Recent Transactions",
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                            color: Color(0xFF064E3B),
+                          ),
+                        ),
+
+                        TextButton(
+                          onPressed: () {
+                            setState(() {
+                              _selectedIndex = 1;
+                            });
+                          },
+                          child: const Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Text(
+                                "View All",
+                                style: TextStyle(
+                                  color: Color(0xFF047857),
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                              SizedBox(width: 4),
+                              Icon(
+                                Icons.arrow_forward_ios,
+                                size: 13,
+                                color: Color(0xFF047857),
+                              ),
+                            ],
                           ),
                         ),
                       ],
+                    ),
+
+                    const SizedBox(height: 12),
+                    Expanded(
+                      child: ListView.builder(
+                        padding: EdgeInsets.zero,
+                        itemCount: recentExpenses.length,
+                        itemBuilder: (context, index) {
+                          final expense = recentExpenses[index];
+
+                          return Padding(
+                            padding: const EdgeInsets.only(bottom: 8),
+                            child: TransactionCard(
+                              icon: getCategoryIcon(expense.category),
+                              color: getCategoryColor(expense.category),
+                              iconBackgroundColor: getCategoryColor(
+                                expense.category,
+                              ).withValues(alpha: 0.15),
+                              title: expense.title,
+                              category: expense.category,
+                              date:
+                                  "${expense.date.day} ${_getMonthName(expense.date.month)} ${expense.date.year}",
+                              amount: "₹ ${expense.amount.toStringAsFixed(2)}",
+                            ),
+                          );
+                        },
+                      ),
                     ),
                   ],
                 ),
@@ -170,12 +366,17 @@ class _DashboardScreenState extends State<DashboardScreen> {
       ),
 
       floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.push(
+        onPressed: () async {
+          final result = await Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => AddExpensesScreen()),
+            MaterialPageRoute(builder: (context) => const AddExpensesScreen()),
           );
+
+          if (result == true) {
+            await loadExpenses();
+          }
         },
+
         backgroundColor: Color(0xFF064E3B),
         foregroundColor: Colors.white,
         shape: CircleBorder(),

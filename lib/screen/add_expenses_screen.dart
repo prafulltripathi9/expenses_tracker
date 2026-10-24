@@ -1,3 +1,4 @@
+import 'package:expenses_tracker/database/app_database.dart';
 import 'package:flutter/material.dart';
 
 class AddExpensesScreen extends StatefulWidget {
@@ -81,6 +82,7 @@ class _AddExpensesScreenState extends State<AddExpensesScreen> {
         return const Color(0xFF78909C);
     }
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -360,22 +362,53 @@ class _AddExpensesScreenState extends State<AddExpensesScreen> {
                   ),
                 ),
                 SizedBox(height: 10),
+
                 SizedBox(
                   width: double.infinity,
                   height: 52,
                   child: ElevatedButton(
-                    onPressed: () {
-                      if (_formKey.currentState!.validate()) {}
+                    onPressed: () async {
+                      if (!_formKey.currentState!.validate()) {
+                        return;
+                      }
+
+                      try {
+                        await appDatabase.insertExpense(
+                          title: titleController.text.trim(),
+                          amount: double.parse(amountController.text.trim()),
+                          category: selectedCategory,
+                          date: selectedDate,
+                          note: noteController.text.trim().isEmpty
+                              ? null
+                              : noteController.text.trim(),
+                        );
+
+                        if (!mounted) return;
+
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text("Expense saved successfully!"),
+                          ),
+                        );
+
+                        Navigator.pop(context, true);
+                      } catch (e) {
+                        if (!mounted) return;
+
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(content: Text("Failed to save expense: $e")),
+                        );
+                      }
                     },
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Color(0xFF064E3B),
+                      backgroundColor: const Color(0xFF064E3B),
                       foregroundColor: Colors.white,
                       elevation: 0,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(12),
                       ),
                     ),
-                    child: Text(
+                    child: const Text(
                       "Save Expense",
                       style: TextStyle(
                         fontSize: 16,

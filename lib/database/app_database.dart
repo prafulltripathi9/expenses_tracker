@@ -49,3 +49,5 @@ QueryExecutor _openConnection() {
     name: 'expenses_database',
   );
 }
+
+final AppDatabase appDatabase = AppDatabase();
