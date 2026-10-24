@@ -8,7 +8,6 @@ class AddExpensesScreen extends StatefulWidget {
 }
 
 class _AddExpensesScreenState extends State<AddExpensesScreen> {
-  @override
   final TextEditingController titleController = TextEditingController();
   final TextEditingController amountController = TextEditingController();
   final TextEditingController noteController = TextEditingController();
@@ -82,7 +81,7 @@ class _AddExpensesScreenState extends State<AddExpensesScreen> {
         return const Color(0xFF78909C);
     }
   }
-
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
