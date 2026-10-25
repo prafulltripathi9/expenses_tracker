@@ -1,14 +1,11 @@
-
+import 'package:expenses_tracker/screen/add_expenses_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:expenses_tracker/database/app_database.dart';
 
 class TransactionDetailScreen extends StatelessWidget {
   final ExpenseData expense;
 
-  const TransactionDetailScreen({
-    super.key,
-    required this.expense,
-  });
+  const TransactionDetailScreen({super.key, required this.expense});
 
   IconData getCategoryIcon(String category) {
     switch (category.toLowerCase()) {
@@ -54,8 +51,18 @@ class TransactionDetailScreen extends StatelessWidget {
 
   String formatDate(DateTime date) {
     const months = [
-      'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
-      'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec',
+      'Jan',
+      'Feb',
+      'Mar',
+      'Apr',
+      'May',
+      'Jun',
+      'Jul',
+      'Aug',
+      'Sep',
+      'Oct',
+      'Nov',
+      'Dec',
     ];
 
     return '${date.day} ${months[date.month - 1]} ${date.year}';
@@ -73,10 +80,7 @@ class TransactionDetailScreen extends StatelessWidget {
         elevation: 0,
         title: const Text(
           'Transaction Detail',
-          style: TextStyle(
-            fontSize: 18,
-            fontWeight: FontWeight.bold,
-          ),
+          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
         ),
         actions: [
           PopupMenuButton<String>(
@@ -96,14 +100,8 @@ class TransactionDetailScreen extends StatelessWidget {
               }
             },
             itemBuilder: (context) => const [
-              PopupMenuItem(
-                value: 'edit',
-                child: Text('Edit'),
-              ),
-              PopupMenuItem(
-                value: 'delete',
-                child: Text('Delete'),
-              ),
+              PopupMenuItem(value: 'edit', child: Text('Edit')),
+              PopupMenuItem(value: 'delete', child: Text('Delete')),
             ],
           ),
         ],
@@ -117,15 +115,15 @@ class TransactionDetailScreen extends StatelessWidget {
 
               // Category icon
               Container(
-                width: 68,
-                height: 68,
+                width: 80,
+                height: 80,
                 decoration: BoxDecoration(
                   color: const Color(0xFFD9E7FF),
                   shape: BoxShape.circle,
                 ),
                 child: Icon(
                   getCategoryIcon(expense.category),
-                  size: 34,
+                  size: 27,
                   color: categoryColor,
                 ),
               ),
@@ -149,7 +147,7 @@ class TransactionDetailScreen extends StatelessWidget {
               Text(
                 '₹ ${expense.amount.toStringAsFixed(0)}',
                 style: const TextStyle(
-                  fontSize: 27,
+                  fontSize: 50,
                   fontWeight: FontWeight.bold,
                   color: Color(0xFF111827),
                 ),
@@ -160,10 +158,7 @@ class TransactionDetailScreen extends StatelessWidget {
               // Date
               Text(
                 formatDate(expense.date),
-                style: const TextStyle(
-                  fontSize: 12,
-                  color: Color(0xFF64748B),
-                ),
+                style: const TextStyle(fontSize: 12, color: Color(0xFF64748B)),
               ),
 
               const SizedBox(height: 16),
@@ -171,6 +166,8 @@ class TransactionDetailScreen extends StatelessWidget {
               // Details card
               Container(
                 width: double.infinity,
+                height: 300,
+
                 padding: const EdgeInsets.symmetric(
                   horizontal: 14,
                   vertical: 4,
@@ -178,9 +175,7 @@ class TransactionDetailScreen extends StatelessWidget {
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(13),
-                  border: Border.all(
-                    color: const Color(0xFFECE9DF),
-                  ),
+                  border: Border.all(color: const Color(0xFFECE9DF)),
                 ),
                 child: Column(
                   children: [
@@ -190,20 +185,17 @@ class TransactionDetailScreen extends StatelessWidget {
                       iconColor: categoryColor,
                       value: expense.category,
                     ),
-                    Divider(
-                      height: 1,
-                      color: Colors.grey.shade200,
-                    ),
+                    SizedBox(height: 10),
+                    Divider(height: 1, color: Colors.grey.shade200),
                     _detailRow(
                       label: 'Date',
                       icon: Icons.calendar_month_outlined,
                       iconColor: const Color(0xFF334155),
                       value: formatDate(expense.date),
                     ),
-                    Divider(
-                      height: 1,
-                      color: Colors.grey.shade200,
-                    ),
+                    SizedBox(height: 10),
+
+                    Divider(height: 1, color: Colors.grey.shade200),
                     _detailRow(
                       label: 'Notes',
                       icon: null,
@@ -215,30 +207,30 @@ class TransactionDetailScreen extends StatelessWidget {
                   ],
                 ),
               ),
-
-              const Spacer(),
-
+              SizedBox(height: 24),
               // Edit and Delete buttons
               Row(
                 children: [
                   Expanded(
                     child: SizedBox(
-                      height: 44,
+                      height: 55,
                       child: OutlinedButton(
-                        onPressed: () {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                              content: Text(
-                                'Edit functionality will be added next.',
-                              ),
+                        onPressed: () async {
+                          final result = await Navigator.push<bool>(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) =>
+                                  AddExpensesScreen(expense: expense),
                             ),
                           );
+
+                          if (result == true && context.mounted) {
+                            Navigator.pop(context, true);
+                          }
                         },
                         style: OutlinedButton.styleFrom(
                           foregroundColor: const Color(0xFF111827),
-                          side: const BorderSide(
-                            color: Color(0xFF9CA3AF),
-                          ),
+                          side: const BorderSide(color: Color(0xFF9CA3AF)),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(11),
                           ),
@@ -250,15 +242,175 @@ class TransactionDetailScreen extends StatelessWidget {
                   const SizedBox(width: 10),
                   Expanded(
                     child: SizedBox(
-                      height: 44,
+                      height: 55,
                       child: ElevatedButton(
                         onPressed: () {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                              content: Text(
-                                'Delete functionality will be added next.',
-                              ),
-                            ),
+                          showDialog(
+                            context: context,
+                            barrierDismissible: false,
+                            builder: (dialogContext) {
+                              return Dialog(
+                                backgroundColor: const Color(0xFFFFFCF5),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(16),
+                                ),
+                                child: Padding(
+                                  padding: const EdgeInsets.fromLTRB(
+                                    18,
+                                    16,
+                                    18,
+                                    15,
+                                  ),
+                                  child: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      // Delete Icon
+                                      Container(
+                                        height: 48,
+                                        width: 48,
+                                        decoration: const BoxDecoration(
+                                          color: Color(0xFFFFDADA),
+                                          shape: BoxShape.circle,
+                                        ),
+                                        child: const Icon(
+                                          Icons.delete,
+                                          color: Color(0xFFEF3038),
+                                          size: 28,
+                                        ),
+                                      ),
+
+                                      const SizedBox(height: 12),
+
+                                      // Heading
+                                      const Text(
+                                        'Delete Expense?',
+                                        style: TextStyle(
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.bold,
+                                          color: Color(0xFF111827),
+                                        ),
+                                      ),
+
+                                      const SizedBox(height: 8),
+
+                                      // Confirmation Message
+                                      const Text(
+                                        'Are you sure you want to delete this '
+                                        'expense? This action cannot be undone.',
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                          fontSize: 13,
+                                          height: 1.4,
+                                          color: Color(0xFF111827),
+                                        ),
+                                      ),
+
+                                      const SizedBox(height: 18),
+
+                                      // Cancel and Delete Buttons
+                                      Row(
+                                        children: [
+                                          Expanded(
+                                            child: SizedBox(
+                                              height: 42,
+                                              child: OutlinedButton(
+                                                onPressed: () {
+                                                  Navigator.pop(dialogContext);
+                                                },
+                                                style: OutlinedButton.styleFrom(
+                                                  foregroundColor: const Color(
+                                                    0xFF111827,
+                                                  ),
+                                                  side: const BorderSide(
+                                                    color: Color(0xFF9CA3AF),
+                                                  ),
+                                                  shape: RoundedRectangleBorder(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                          11,
+                                                        ),
+                                                  ),
+                                                ),
+                                                child: const Text('Cancel'),
+                                              ),
+                                            ),
+                                          ),
+
+                                          const SizedBox(width: 12),
+
+                                          Expanded(
+                                            child: SizedBox(
+                                              height: 42,
+                                              child: ElevatedButton(
+                                                onPressed: () async {
+                                                  try {
+                                                    // Delete expense from database
+                                                    await appDatabase
+                                                        .deleteExpense(
+                                                          expense.id,
+                                                        );
+
+                                                    if (!context.mounted)
+                                                      return;
+
+                                                    // Close confirmation popup
+                                                    Navigator.pop(
+                                                      dialogContext,
+                                                    );
+
+                                                    // Close detail screen and return success result
+                                                    Navigator.pop(
+                                                      context,
+                                                      true,
+                                                    );
+                                                  } catch (e) {
+                                                    if (!context.mounted)
+                                                      return;
+
+                                                    Navigator.pop(
+                                                      dialogContext,
+                                                    );
+
+                                                    ScaffoldMessenger.of(
+                                                      context,
+                                                    ).showSnackBar(
+                                                      SnackBar(
+                                                        content: Text(
+                                                          'Failed to delete expense: $e',
+                                                        ),
+                                                      ),
+                                                    );
+                                                  }
+                                                },
+                                                style: ElevatedButton.styleFrom(
+                                                  backgroundColor: const Color(
+                                                    0xFFEF3038,
+                                                  ),
+                                                  foregroundColor: Colors.white,
+                                                  elevation: 0,
+                                                  shape: RoundedRectangleBorder(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                          11,
+                                                        ),
+                                                  ),
+                                                ),
+                                                child: const Text(
+                                                  'Delete',
+                                                  style: TextStyle(
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              );
+                            },
                           );
                         },
                         style: ElevatedButton.styleFrom(
@@ -271,9 +423,7 @@ class TransactionDetailScreen extends StatelessWidget {
                         ),
                         child: const Text(
                           'Delete',
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                          ),
+                          style: TextStyle(fontWeight: FontWeight.bold),
                         ),
                       ),
                     ),
@@ -301,10 +451,7 @@ class TransactionDetailScreen extends StatelessWidget {
             width: 76,
             child: Text(
               label,
-              style: const TextStyle(
-                fontSize: 12,
-                color: Color(0xFF64748B),
-              ),
+              style: const TextStyle(fontSize: 12, color: Color(0xFF64748B)),
             ),
           ),
           if (icon != null) ...[
@@ -315,11 +462,7 @@ class TransactionDetailScreen extends StatelessWidget {
                 color: const Color(0xFFE5EDFF),
                 borderRadius: BorderRadius.circular(8),
               ),
-              child: Icon(
-                icon,
-                size: 17,
-                color: iconColor,
-              ),
+              child: Icon(icon, size: 17, color: iconColor),
             ),
             const SizedBox(width: 8),
           ],

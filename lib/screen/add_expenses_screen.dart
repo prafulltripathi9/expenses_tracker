@@ -2,7 +2,9 @@ import 'package:expenses_tracker/database/app_database.dart';
 import 'package:flutter/material.dart';
 
 class AddExpensesScreen extends StatefulWidget {
-  const AddExpensesScreen({super.key});
+  final ExpenseData? expense;
+
+  const AddExpensesScreen({super.key, this.expense});
 
   @override
   State<AddExpensesScreen> createState() => _AddExpensesScreenState();
@@ -15,6 +17,22 @@ class _AddExpensesScreenState extends State<AddExpensesScreen> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   String selectedCategory = "Food";
   DateTime selectedDate = DateTime.now();
+  @override
+  void initState() {
+    super.initState();
+
+    final expense = widget.expense;
+
+    if (expense != null) {
+      titleController.text = expense.title;
+      amountController.text = expense.amount.toString();
+      noteController.text = expense.note ?? '';
+
+      selectedCategory = expense.category;
+      selectedDate = expense.date;
+    }
+  }
+
   Future<void> pickDdate() async {
     final DateTime? picked = await showDatePicker(
       context: context,
@@ -88,8 +106,8 @@ class _AddExpensesScreenState extends State<AddExpensesScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          "Add Expenses",
-          style: TextStyle(fontWeight: FontWeight.bold),
+          widget.expense == null ? "Add Expense" : "Edit Expense",
+          style: const TextStyle(fontWeight: FontWeight.bold),
         ),
         backgroundColor: Color(0xFFF5F2E8),
         // foregroundColor: Color(0xFF064E3B),
@@ -373,21 +391,42 @@ class _AddExpensesScreenState extends State<AddExpensesScreen> {
                       }
 
                       try {
-                        await appDatabase.insertExpense(
-                          title: titleController.text.trim(),
-                          amount: double.parse(amountController.text.trim()),
-                          category: selectedCategory,
-                          date: selectedDate,
-                          note: noteController.text.trim().isEmpty
-                              ? null
-                              : noteController.text.trim(),
-                        );
+                        final existingExpense = widget.expense;
+
+                        if (existingExpense == null) {
+                          // Add new expense
+                          await appDatabase.insertExpense(
+                            title: titleController.text.trim(),
+                            amount: double.parse(amountController.text.trim()),
+                            category: selectedCategory,
+                            date: selectedDate,
+                            note: noteController.text.trim().isEmpty
+                                ? null
+                                : noteController.text.trim(),
+                          );
+                        } else {
+                          // Update existing expense
+                          await appDatabase.updateExpense(
+                            id: existingExpense.id,
+                            title: titleController.text.trim(),
+                            amount: double.parse(amountController.text.trim()),
+                            category: selectedCategory,
+                            date: selectedDate,
+                            note: noteController.text.trim().isEmpty
+                                ? null
+                                : noteController.text.trim(),
+                          );
+                        }
 
                         if (!mounted) return;
 
                         ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            content: Text("Expense saved successfully!"),
+                          SnackBar(
+                            content: Text(
+                              existingExpense == null
+                                  ? "Expense saved successfully!"
+                                  : "Expense updated successfully!",
+                            ),
                           ),
                         );
 
@@ -408,9 +447,11 @@ class _AddExpensesScreenState extends State<AddExpensesScreen> {
                         borderRadius: BorderRadius.circular(12),
                       ),
                     ),
-                    child: const Text(
-                      "Save Expense",
-                      style: TextStyle(
+                    child: Text(
+                      widget.expense == null
+                          ? "Save Expense"
+                          : "Update Expense",
+                      style: const TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
                       ),

@@ -1,4 +1,5 @@
 import 'package:expenses_tracker/screen/add_expenses_screen.dart';
+import 'package:expenses_tracker/screen/monthly_expenses_screen.dart';
 import 'package:expenses_tracker/screen/settings_screen.dart';
 import 'package:expenses_tracker/screen/statics_screen.dart';
 import 'package:expenses_tracker/screen/transcation_screen.dart';
@@ -238,14 +239,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
                             ],
                           ),
                         ),
-                        IconButton(
-                          onPressed: () {},
-                          icon: const Icon(
-                            Icons.filter_list,
-                            color: Color(0xFF064E3B),
-                            size: 28,
-                          ),
-                        ),
                       ],
                     ),
                     SizedBox(height: 20),
@@ -270,6 +263,15 @@ class _DashboardScreenState extends State<DashboardScreen> {
                             subtitle: _getCurrentMonth(),
                             color: Color(0xFFDC2626),
                             iconBackgroundColor: Color(0xFFFEE2E2),
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) =>
+                                      const MonthlyExpensesScreen(),
+                                ),
+                              );
+                            },
                           ),
                         ),
                       ],

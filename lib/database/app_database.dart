@@ -40,8 +40,30 @@ class AppDatabase extends _$AppDatabase {
     ),
   );
 }
+//Updaet Expense
+Future<int> updateExpense({
+  required int id,
+  required String title,
+  required double amount,
+  required String category,
+  required DateTime date,
+  String? note,
+}) {
+  return (update(expenses)..where((tbl) => tbl.id.equals(id))).write(
+    ExpensesCompanion(
+      title: Value(title),
+      amount: Value(amount),
+      category: Value(category),
+      date: Value(date),
+      note: Value(note),
+    ),
+  );
+}
 Future<List<ExpenseData>> getAllExpenses() {
   return select(expenses).get();
+}
+Future<int> deleteExpense(int id) {
+  return (delete(expenses)..where((tbl) => tbl.id.equals(id))).go();
 }
 }
 QueryExecutor _openConnection() {
