@@ -29,169 +29,191 @@ class SettingsScreen extends StatelessWidget {
             ),
 
             Expanded(
-              child: SingleChildScrollView(
-                padding: const EdgeInsets.fromLTRB(14, 0, 14, 20),
-                
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    // App Settings Section
-                    _buildSectionHeading('App Settings'),
+              child: LayoutBuilder(
+                builder: (context, constraints) {
+                  const double maxContentWidth = 700;
 
-                    const SizedBox(height: 8),
+                  final double contentWidth =
+                      constraints.maxWidth > maxContentWidth
+                      ? maxContentWidth
+                      : constraints.maxWidth;
 
-                    Container(  
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(14),
-                      ),
-                      child: Column(
-                        children: [
-                          _buildSettingTile(
-                            icon: Icons.wb_sunny,
-                            iconColor: const Color(0xFFFF9800),
-                            title: 'Theme',
-                            trailingText: 'Light',
-                            onTap: () {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                  content: Text(
-                                    'Theme settings coming soon.',
+                  return SingleChildScrollView(
+                    padding: const EdgeInsets.fromLTRB(14, 0, 14, 20),
+                    child: Center(
+                      child: SizedBox(
+                        width: contentWidth,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            // App Settings Section
+                            _buildSectionHeading('App Settings'),
+
+                            const SizedBox(height: 8),
+
+                            Container(
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(14),
+                              ),
+                              child: Column(
+                                children: [
+                                  _buildSettingTile(
+                                    icon: Icons.wb_sunny,
+                                    iconColor: const Color(0xFFFF9800),
+                                    title: 'Theme',
+                                    trailingText: 'Light',
+                                    onTap: () {
+                                      ScaffoldMessenger.of(
+                                        context,
+                                      ).showSnackBar(
+                                        const SnackBar(
+                                          content: Text(
+                                            'Theme settings coming soon.',
+                                          ),
+                                        ),
+                                      );
+                                    },
                                   ),
-                                ),
-                              );
-                            },
-                          ),
 
-                          _buildDivider(),
+                                  _buildDivider(),
 
-                          _buildSettingTile(
-                            icon: Icons.currency_exchange,
-                            iconColor: const Color(0xFFFFB52E),
-                            title: 'Currency',
-                            trailingText: 'INR (₹)',
-                            onTap: () {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                  content: Text(
-                                    'Currency settings coming soon.',
-                                  ),
-                                ),
-                              );
-                            },
-                          ),
-                        ],
-                      ),
-                    ),
-
-                    const SizedBox(height: 22),
-
-                    // About Section
-                    _buildSectionHeading('About'),
-
-                    const SizedBox(height: 8),
-
-                    Container(
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(14),
-                      ),
-                      child: Column(
-                        children: [
-                          _buildSettingTile(
-                            icon: Icons.access_time_filled,
-                            iconColor: const Color(0xFF616161),
-                            title: 'App Version',
-                            trailingText: '1.0.0',
-                            showArrow: false,
-                            onTap: () {},
-                          ),
-
-                          _buildDivider(),
-
-                          _buildSettingTile(
-                            icon: Icons.info,
-                            iconColor: const Color(0xFF616161),
-                            title: 'About App',
-                            trailingText: 'Personal Expense Tracker',
-                            showArrow: false,
-                            onTap: () {
-                              showAboutDialog(
-                                context: context,
-                                applicationName: 'Personal Expense Tracker',
-                                applicationVersion: '1.0.0',
-                                applicationIcon: const Icon(
-                                  Icons.account_balance_wallet,
-                                  size: 40,
-                                  color: primaryColor,
-                                ),
-                                children: const [
-                                  Text(
-                                    'Track your expenses and manage your '
-                                    'daily spending in one place.',
+                                  _buildSettingTile(
+                                    icon: Icons.currency_exchange,
+                                    iconColor: const Color(0xFFFFB52E),
+                                    title: 'Currency',
+                                    trailingText: 'INR (₹)',
+                                    onTap: () {
+                                      ScaffoldMessenger.of(
+                                        context,
+                                      ).showSnackBar(
+                                        const SnackBar(
+                                          content: Text(
+                                            'Currency settings coming soon.',
+                                          ),
+                                        ),
+                                      );
+                                    },
                                   ),
                                 ],
-                              );
-                            },
-                          ),
+                              ),
+                            ),
 
-                          _buildDivider(),
+                            const SizedBox(height: 22),
 
-                          _buildSettingTile(
-                            icon: Icons.help,
-                            iconColor: const Color(0xFF616161),
-                            title: 'Help & Support',
-                            trailingText: 'Get Help',
-                            showArrow: false,
-                            onTap: () {
-                              showDialog(
-                                context: context,
-                                builder: (dialogContext) {
-                                  return AlertDialog(
-                                    title: const Text('Help & Support'),
-                                    content: const Text(
-                                      'Need help using Personal Expense '
-                                      'Tracker? Support functionality '
-                                      'will be available soon.',
-                                    ),
-                                    actions: [
-                                      TextButton(
-                                        onPressed: () {
-                                          Navigator.pop(dialogContext);
-                                        },
-                                        child: const Text('Close'),
-                                      ),
-                                    ],
-                                  );
-                                },
-                              );
-                            },
-                          ),
+                            // About Section
+                            _buildSectionHeading('About'),
 
-                          _buildDivider(),
+                            const SizedBox(height: 8),
 
-                          _buildSettingTile(
-                            icon: Icons.star,
-                            iconColor: const Color(0xFFFF9800),
-                            title: 'Rate Us',
-                            trailingText: 'On Play Store',
-                            showArrow: false,
-                            onTap: () {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                  content: Text(
-                                    'Play Store rating will be available '
-                                    'after publishing the app.',
+                            Container(
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(14),
+                              ),
+                              child: Column(
+                                children: [
+                                  _buildSettingTile(
+                                    icon: Icons.access_time_filled,
+                                    iconColor: const Color(0xFF616161),
+                                    title: 'App Version',
+                                    trailingText: '1.0.0',
+                                    showArrow: false,
+                                    onTap: () {},
                                   ),
-                                ),
-                              );
-                            },
-                          ),
-                        ],
+
+                                  _buildDivider(),
+
+                                  _buildSettingTile(
+                                    icon: Icons.info,
+                                    iconColor: const Color(0xFF616161),
+                                    title: 'About App',
+                                    trailingText: 'Personal Expense Tracker',
+                                    showArrow: false,
+                                    onTap: () {
+                                      showAboutDialog(
+                                        context: context,
+                                        applicationName:
+                                            'Personal Expense Tracker',
+                                        applicationVersion: '1.0.0',
+                                        applicationIcon: const Icon(
+                                          Icons.account_balance_wallet,
+                                          size: 40,
+                                          color: primaryColor,
+                                        ),
+                                        children: const [
+                                          Text(
+                                            'Track your expenses and manage your '
+                                            'daily spending in one place.',
+                                          ),
+                                        ],
+                                      );
+                                    },
+                                  ),
+
+                                  _buildDivider(),
+
+                                  _buildSettingTile(
+                                    icon: Icons.help,
+                                    iconColor: const Color(0xFF616161),
+                                    title: 'Help & Support',
+                                    trailingText: 'Get Help',
+                                    showArrow: false,
+                                    onTap: () {
+                                      showDialog(
+                                        context: context,
+                                        builder: (dialogContext) {
+                                          return AlertDialog(
+                                            title: const Text('Help & Support'),
+                                            content: const Text(
+                                              'Need help using Personal Expense '
+                                              'Tracker? Support functionality '
+                                              'will be available soon.',
+                                            ),
+                                            actions: [
+                                              TextButton(
+                                                onPressed: () {
+                                                  Navigator.pop(dialogContext);
+                                                },
+                                                child: const Text('Close'),
+                                              ),
+                                            ],
+                                          );
+                                        },
+                                      );
+                                    },
+                                  ),
+
+                                  _buildDivider(),
+
+                                  _buildSettingTile(
+                                    icon: Icons.star,
+                                    iconColor: const Color(0xFFFF9800),
+                                    title: 'Rate Us',
+                                    trailingText: 'On Play Store',
+                                    showArrow: false,
+                                    onTap: () {
+                                      ScaffoldMessenger.of(
+                                        context,
+                                      ).showSnackBar(
+                                        const SnackBar(
+                                          content: Text(
+                                            'Play Store rating will be available '
+                                            'after publishing the app.',
+                                          ),
+                                        ),
+                                      );
+                                    },
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
-                  ],
-                ),
+                  );
+                },
               ),
             ),
           ],
@@ -204,10 +226,7 @@ class SettingsScreen extends StatelessWidget {
   static Widget _buildSectionHeading(String title) {
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.symmetric(
-        horizontal: 12,
-        vertical: 8,
-      ),
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
       decoration: BoxDecoration(
         color: sectionColor,
         borderRadius: BorderRadius.circular(8),
@@ -236,43 +255,45 @@ class SettingsScreen extends StatelessWidget {
       onTap: onTap,
       borderRadius: BorderRadius.circular(12),
       child: Padding(
-        padding: const EdgeInsets.symmetric(
-          horizontal: 12,
-          vertical: 13,
-        ),
+        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
         child: Row(
           children: [
-            Icon(
-              icon,
-              color: iconColor,
-              size: 20,
-            ),
+            Icon(icon, color: iconColor, size: 21),
 
             const SizedBox(width: 14),
 
             Expanded(
               child: Text(
                 title,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
                 style: const TextStyle(
-                  fontSize: 12,
+                  fontSize: 14,
                   fontWeight: FontWeight.w500,
                   color: Color(0xFF111827),
                 ),
               ),
             ),
 
-            const SizedBox(width: 8),
+            const SizedBox(width: 12),
 
             Flexible(
-              child: Text(
-                trailingText,
-                textAlign: TextAlign.end,
-                overflow: TextOverflow.ellipsis,
-                maxLines: 1,
-                style: const TextStyle(
-                  fontSize: 11,
-                  color: Color(0xFF64748B),
-                ),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Flexible(
+                    child: Text(
+                      trailingText,
+                      textAlign: TextAlign.end,
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 1,
+                      style: const TextStyle(
+                        fontSize: 11,
+                        color: Color(0xFF64748B),
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
 
@@ -294,11 +315,7 @@ class SettingsScreen extends StatelessWidget {
   static Widget _buildDivider() {
     return const Padding(
       padding: EdgeInsets.only(left: 46),
-      child: Divider(
-        height: 1,
-        thickness: 0.5,
-        color: Color(0xFFE5E7EB),
-      ),
+      child: Divider(height: 1, thickness: 0.5, color: Color(0xFFE5E7EB)),
     );
   }
 }

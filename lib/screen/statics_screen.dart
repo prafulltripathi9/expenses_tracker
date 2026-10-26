@@ -66,6 +66,7 @@ class StaticsScreen extends StatelessWidget {
               // Category-wise Spending
               Container(
                 width: double.infinity,
+                height: 300,
                 padding: const EdgeInsets.all(12),
                 decoration: BoxDecoration(
                   color: const Color(0xFFFFFCF5),
@@ -99,14 +100,14 @@ class StaticsScreen extends StatelessWidget {
                         Expanded(
                           flex: 5,
                           child: SizedBox(
-                            height: 150,
+                            height: 220,
                             child: Stack(
                               alignment: Alignment.center,
                               children: [
                                 PieChart(
                                   PieChartData(
                                     sectionsSpace: 2,
-                                    centerSpaceRadius: 36,
+                                    centerSpaceRadius: 60,
                                     startDegreeOffset: -90,
                                     sections: [
                                       _chartSection(
@@ -137,7 +138,7 @@ class StaticsScreen extends StatelessWidget {
                                     Text(
                                       '₹ 3,200',
                                       style: TextStyle(
-                                        fontSize: 13,
+                                        fontSize: 18,
                                         fontWeight: FontWeight.bold,
                                         color: Color(0xFF111827),
                                       ),
@@ -145,7 +146,7 @@ class StaticsScreen extends StatelessWidget {
                                     Text(
                                       'Total',
                                       style: TextStyle(
-                                        fontSize: 10,
+                                        fontSize: 13,
                                         color: Color(0xFF64748B),
                                       ),
                                     ),
@@ -221,6 +222,7 @@ class StaticsScreen extends StatelessWidget {
                   // Previous Month
                   Expanded(
                     child: Container(
+
                       padding: const EdgeInsets.all(12),
                       decoration: BoxDecoration(
                         color: const Color(0xFFFFE3DF),
@@ -324,7 +326,7 @@ class StaticsScreen extends StatelessWidget {
     required String subtitle,
   }) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 12),
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 20),
       decoration: BoxDecoration(
         color: const Color(0xFFFFFCF5),
         borderRadius: BorderRadius.circular(14),
@@ -400,7 +402,7 @@ class StaticsScreen extends StatelessWidget {
           Expanded(
             child: Text(
               title,
-              style: const TextStyle(fontSize: 10, color: Color(0xFF111827)),
+              style: const TextStyle(fontSize: 14, color: Color(0xFF111827)),
               overflow: TextOverflow.ellipsis,
             ),
           ),
@@ -409,7 +411,7 @@ class StaticsScreen extends StatelessWidget {
 
           Text(
             percentage,
-            style: const TextStyle(fontSize: 10, color: Color(0xFF111827)),
+            style: const TextStyle(fontSize: 14, color: Color(0xFF111827)),
           ),
         ],
       ),
