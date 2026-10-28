@@ -222,7 +222,6 @@ class StaticsScreen extends StatelessWidget {
                   // Previous Month
                   Expanded(
                     child: Container(
-
                       padding: const EdgeInsets.all(12),
                       decoration: BoxDecoration(
                         color: const Color(0xFFFFE3DF),
@@ -234,7 +233,7 @@ class StaticsScreen extends StatelessWidget {
                           const Text(
                             'September 2024',
                             style: TextStyle(
-                              fontSize: 11,
+                              fontSize: 13,
                               color: Color(0xFFB83B46),
                             ),
                           ),
@@ -244,7 +243,7 @@ class StaticsScreen extends StatelessWidget {
                           const Text(
                             '₹ 4,500',
                             style: TextStyle(
-                              fontSize: 16,
+                              fontSize: 18,
                               fontWeight: FontWeight.bold,
                               color: Color(0xFFB91C1C),
                             ),
@@ -270,7 +269,7 @@ class StaticsScreen extends StatelessWidget {
                           const Text(
                             'October 2024',
                             style: TextStyle(
-                              fontSize: 11,
+                              fontSize: 13,
                               color: Color(0xFF52735B),
                             ),
                           ),
@@ -280,7 +279,7 @@ class StaticsScreen extends StatelessWidget {
                           const Text(
                             '₹ 3,200',
                             style: TextStyle(
-                              fontSize: 16,
+                              fontSize: 18,
                               fontWeight: FontWeight.bold,
                               color: Color(0xFF064E3B),
                             ),
@@ -292,7 +291,7 @@ class StaticsScreen extends StatelessWidget {
                             children: [
                               Icon(
                                 Icons.arrow_downward,
-                                size: 13,
+                                size: 15,
                                 color: Color(0xFF047857),
                               ),
                               SizedBox(width: 3),
@@ -300,7 +299,7 @@ class StaticsScreen extends StatelessWidget {
                                 child: Text(
                                   '28.9% less spent',
                                   style: TextStyle(
-                                    fontSize: 10,
+                                    fontSize: 12,
                                     color: Color(0xFF047857),
                                   ),
                                 ),
