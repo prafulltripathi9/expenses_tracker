@@ -12,21 +12,13 @@ class WelcomeScreen extends StatelessWidget {
         child: Container(
           width: double.infinity,
           height: double.infinity,
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
-              colors: [Color(0xFFF5F2E8), Color(0xFFE5F0D8), Color(0xFFAED9B7)],
-            ),
-          ),
+          decoration: const BoxDecoration(color: Color(0xFFB5D9B0)),
           child: Stack(
             children: [
               //First wave
-              Positioned.fill(
-                child:  BackgroundWave(color: Color(0xFFD5E8C8)),
-              ),
+              Positioned.fill(child: BackgroundWave(color: Color(0xFFD5E8C8))),
               //Second Wave.
-              Positioned.fill(child: BackgroundWave(color: Color(0xFFB5D9B0)),),
+              Positioned.fill(child: BackgroundWave(color: Color(0xFFB5D9B0))),
               Center(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -68,7 +60,12 @@ class WelcomeScreen extends StatelessWidget {
                       height: 50,
                       child: ElevatedButton(
                         onPressed: () {
-                          Navigator.push(context, MaterialPageRoute(builder: (context) => DashboardScreen()));
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => DashboardScreen(),
+                            ),
+                          );
                         },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Color(0xFF064E3B),

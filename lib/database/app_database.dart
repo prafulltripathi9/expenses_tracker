@@ -64,7 +64,6 @@ class AppDatabase extends _$AppDatabase {
   Future<List<ExpenseData>> getAllExpenses() {
     return select(expenses).get();  
   }
-  
   Stream<List<ExpenseData>> watchAllExpenses() {
   return select(expenses).watch();
 }
