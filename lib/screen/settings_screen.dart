@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:expenses_tracker/main.dart';
 
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({super.key});
@@ -120,48 +121,94 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
   //Widget _buildSwitchTile
   Widget _buildSwitchTile({
-  required IconData icon,
-  required Color iconColor,
-  required String title,
-  required bool value,
-  required ValueChanged<bool> onChanged,
-}) {
-  return Padding(
-    padding: const EdgeInsets.symmetric(
-      horizontal: 14,
-      vertical: 8,
-    ),
-    child: Row(
-      children: [
-        Icon(
-          icon,
-          color: iconColor,
-          size: 22,
-        ),
+    required IconData icon,
+    required Color iconColor,
+    required String title,
+    required bool value,
+    required ValueChanged<bool> onChanged,
+  }) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+      child: Row(
+        children: [
+          Icon(icon, color: iconColor, size: 22),
 
-        const SizedBox(width: 14),
+          const SizedBox(width: 14),
 
-        Expanded(
-          child: Text(
-            title,
-            style: const TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.w500,
-              color: Color(0xFF111827),
+          Expanded(
+            child: Text(
+              title,
+              style: const TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.w500,
+                color: Color(0xFF111827),
+              ),
             ),
           ),
-        ),
 
-        Switch(
-          value: value,
-          activeThumbColor: const Color(0xFF064E3B),
-          onChanged: onChanged,
-        ),
-      ],
-    ),
+          Switch(
+            value: value,
+            activeThumbColor: const Color(0xFF064E3B),
+            onChanged: onChanged,
+          ),
+        ],
+      ),
+    );
+  }
+  // _showThemeDialog method for theme settings
+void _showThemeDialog(BuildContext context) {
+  showDialog(
+    context: context,
+    builder: (dialogContext) {
+      return AnimatedBuilder(
+        animation: themeService,
+        builder: (context, child) {
+          return AlertDialog(
+            title: const Text('Choose Theme'),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                RadioListTile<ThemeMode>(
+                  title: const Text('Light'),
+                  value: ThemeMode.light,
+                  groupValue: themeService.themeMode,
+                  onChanged: (value) {
+                    if (value != null) {
+                      themeService.setTheme(value);
+                      Navigator.pop(dialogContext);
+                    }
+                  },
+                ),
+                RadioListTile<ThemeMode>(
+                  title: const Text('Dark'),
+                  value: ThemeMode.dark,
+                  groupValue: themeService.themeMode,
+                  onChanged: (value) {
+                    if (value != null) {
+                      themeService.setTheme(value);
+                      Navigator.pop(dialogContext);
+                    }
+                  },
+                ),
+                RadioListTile<ThemeMode>(
+                  title: const Text('System Default'),
+                  value: ThemeMode.system,
+                  groupValue: themeService.themeMode,
+                  onChanged: (value) {
+                    if (value != null) {
+                      themeService.setTheme(value);
+                      Navigator.pop(dialogContext);
+                    }
+                  },
+                ),
+              ],
+            ),
+          );
+        },
+      );
+    },
   );
 }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -224,17 +271,14 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                       icon: Icons.wb_sunny,
                                       iconColor: const Color(0xFFFF9800),
                                       title: 'Theme',
-                                      trailingText: 'Light',
+                                      trailingText: switch (themeService
+                                          .themeMode) {
+                                        ThemeMode.light => 'Light',
+                                        ThemeMode.dark => 'Dark',
+                                        ThemeMode.system => 'System Default',
+                                      },
                                       onTap: () {
-                                        ScaffoldMessenger.of(
-                                          context,
-                                        ).showSnackBar(
-                                          const SnackBar(
-                                            content: Text(
-                                              'Theme settings coming soon.',
-                                            ),
-                                          ),
-                                        );
+                                         _showThemeDialog(context);
                                       },
                                     ),
 
@@ -336,15 +380,14 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                       showArrow: false,
                                       onTap: () {},
                                     ),
-                              
+
                                     SettingsScreen._buildDivider(),
-                              
+
                                     SettingsScreen._buildSettingTile(
                                       icon: Icons.info,
                                       iconColor: const Color(0xFF616161),
                                       title: 'About App',
-                                      trailingText:
-                                          'Personal Expense Tracker',
+                                      trailingText: 'Personal Expense Tracker',
                                       showArrow: false,
                                       onTap: () {
                                         showAboutDialog(
@@ -355,8 +398,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                           applicationIcon: const Icon(
                                             Icons.account_balance_wallet,
                                             size: 40,
-                                            color:
-                                                SettingsScreen.primaryColor,
+                                            color: SettingsScreen.primaryColor,
                                           ),
                                           children: const [
                                             Text(
@@ -367,9 +409,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                         );
                                       },
                                     ),
-                              
+
                                     SettingsScreen._buildDivider(),
-                              
+
                                     SettingsScreen._buildSettingTile(
                                       icon: Icons.help,
                                       iconColor: const Color(0xFF616161),
@@ -405,9 +447,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                         );
                                       },
                                     ),
-                              
+
                                     SettingsScreen._buildDivider(),
-                              
+
                                     SettingsScreen._buildSettingTile(
                                       icon: Icons.star,
                                       iconColor: const Color(0xFFFF9800),

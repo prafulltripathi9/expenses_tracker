@@ -62,8 +62,12 @@ class AppDatabase extends _$AppDatabase {
   }
 
   Future<List<ExpenseData>> getAllExpenses() {
-    return select(expenses).get();
+    return select(expenses).get();  
   }
+  
+  Stream<List<ExpenseData>> watchAllExpenses() {
+  return select(expenses).watch();
+}
 
   Future<int> deleteExpense(int id) {
     return (delete(expenses)..where((tbl) => tbl.id.equals(id))).go();
